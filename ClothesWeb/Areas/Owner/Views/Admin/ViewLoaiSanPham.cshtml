@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Category>
+
+@{
+  Pager pager = new Pager();
+  int pageNo = 0;
+  if (ViewBag.Pager != null)
+  {
+    pager = ViewBag.Pager;
+    pageNo = pager.CurentPage;
+  }
+}
+
+<div class="">
+  <div class="w-100">
+    <div class="col-lg">
+      <div class="card rounded shadow border-0">
+        <div class="card-body p-5 bg-white rounded">
+          <div class="table-responsive">
+          <h2 class="text-uppercase text-center m-4">Danh sách loại sản phẩm</h2>
+            <table class="table" style="font-size: 16px;">
+              <thead class="text-center" style="font-size: 20px; font-weight: 700;">
+                <tr class=" font-weight-bold">
+                  <th>Mã sản phẩm</th>
+                  <th>Tên loại sản phẩm</th>
+                  <th>Ngày tạo</th>
+                  <th>Chức năng</th>
+                </tr>
+              </thead>
+              @foreach (var item in Model)
+              {
+                <tbody class="text-center">
+                  <tr>
+                    <td>@item.LoaiId</td>
+                    <td width="30%" class="text-start">@item.Name</td>
+                    <td width="30%">@String.Format("{0:dd/MM/yyyy}", item.DateCreated)</td>
+                    <td>
+                      <a asp-controller="Admin" asp-action="LoaiSanPham" asp-route-id="@item.LoaiId" class="btn btn-primary me-2">Cập nhật</a>
+                      <a class="btn btn-danger" onclick="Xoa('@item.LoaiId', $(this))">Xóa</a>
+                    </td>
+                  </tr>
+                </tbody>
+              }
+            </table>
+            <span>
+              <a asp-controller="Admin" asp-action="LoaiSanPham" class="btn btn-success">Tạo mới</a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<Product>
+
+@{
+
+  Pager pager = new Pager();
+  int pageNo = 0;
+  if (ViewBag.Pager != null)
+  {
+    pager = ViewBag.Pager;
+    pageNo = pager.CurentPage;
+  }
+}
+
+
+<div class="container-fluid">
+  <div class="row">
+    <h1 class="m-4 text-center">Danh sách sản phẩm</h1>
+
+    <form class="input-group rounded" action="TimKiemSanPham" method="get">
+      <input type="search" name="name" class="form-control rounded" placeholder="Search Products" aria-label="Search" aria-describedby="search-addon" />
+      <button class="input-group-text border-0 text-dark" id="search-addon" value="Search" asp-controller="Admin" asp-action="TimKiemSanPham">
+        <i class="fas fa-search"></i>
+      </button>
+    </form>
+
+    @*<div class="single_sedebar">
+        <div class="select_option">
+          <div class="select_option_list">Category <i class="right fas fa-caret-down"></i> </div>
+          @await Component.InvokeAsync("AdminPhanloai")
+        </div>
+      </div>*@
+
+    <hr style="margin: 4rem 0;" />
+
+    @if (Model != null)
+    {
+      @foreach (var item in Model)
+      {
+        <div class="col-sm-6 col-xl-3" id="box">
+          <div class="card overflow-hidden rounded-2 border shadow">
+            <div class="position-relative w-60">
+              <a href="javascript:void(0)"><img style="width: 262px; height: 262px;" src="@item.ImageUrl" class="card-img-top rounded-0" alt="..."></a>
+              <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3"
+                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
+            </div>
+            <div class="card-body pt-3 p-4">
+              <h6 class="fw-semibold fs-4 truncate-text">@item.Name</h6>
+              <div class="d-flex flex-column align-items-center justify-content-between">
+                <h6 class="fw-semibold fs-4 mb-0">@String.Format("{0:0,0}", @item.Price)đ<span class="ms-2 fw-normal text-muted fs-3"><del>999,000đ</del></span></h6>
+
+                <ul class="list-unstyled d-flex align-items-center mb-0">
+                  <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
+                  <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
+                  <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
+                  <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
+                  <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="d-flex flex-column">
+              <a class="btn btn-warning rounded-0" asp-action="Upsert" asp-route-id="@item.IdProduct">Cập nhật</a>
+              <a class="btn btn-secondary rounded-0" asp-controller="Admin" asp-action="Product_Details" asp-route-productId="@item.IdProduct">Chi tiết</a>
+              <a class="btn btn-danger rounded-0" onclick="Xoa(@item.IdProduct, $(this))">Xóa</a>
+            </div>
+          </div>
+        </div>
+      }
+    }
+    <div class="container">
+      @if (pager.TotalPages > 0)
+      {
+        <ul class="pagination justify-content-center">
+          @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+          {
+            <li class="page-item @(pge == pager.CurentPage ? "active" : "")">
+              <a class="page-link" asp-controller="Admin"
+                 asp-action="AdminProducts"
+                 asp-route-page="@pge">@pge</a>
+              </li>
+            }
+        </ul>
+      }
+    </div>
+    <span>
+      <a asp-controller="Admin" asp-action="Upsert" class="btn btn-primary">Tạo mới</a>
+    </span>
+  </div>
+</div>

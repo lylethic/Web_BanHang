@@ -1,0 +1,9 @@
+﻿@model IEnumerable<Category>
+
+<ul class="submenu">
+  @foreach (var item in Model)
+  {
+    <li><a asp-controller="Home" asp-action="Catagori" asp-route-loaiId="@item.LoaiId">@item.Name</a></li>
+  }
+</ul>
+

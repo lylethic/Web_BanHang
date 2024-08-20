@@ -1,0 +1,52 @@
+﻿@model IEnumerable<ChiTietHoaDon>
+
+@if (Model != null && Model.Any())
+{
+  <div class="container">
+    <h2 class="text-center m-4">Chi tiết đơn hàng</h2>
+    <hr />
+    <table class="table">
+      <thead class="text-center">
+        <tr>
+          <th></th>
+          <th>Tên sản phẩm</th>
+          <th>Số lượng</th>
+          <th>Giá tiền</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        @foreach (var item in Model)
+        {
+          <tr>
+            <td><img style="width: 80px; height: 80px;" src="@item.ImgURL" alt="Product Image"></td>
+            <td class="text-left">@item.ProductName</td>
+            <td>@item.Quantity</td>
+            <td>@String.Format("{0:0,0}", item.ProductPrice)</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <div class="container">
+      <hr />
+      <div class="d-flex justify-content-end">
+        <span>
+          <strong style="font-size: 14px" class="text-uppercase">Thành tiền:</strong>
+          <span style="font-weight: 600; color: red; font-size: 20px;">
+            @String.Format("{0:0,0}", @ViewBag.Total) đ
+          </span>
+        </span>
+      </div>
+
+    </div>
+    @*<div class="container">
+      <button class="btn btn-primary">
+        Hủy đơn hàng
+      </button>
+    </div>*@
+  </div>
+}
+else
+{
+  <h3>Không có sản phẩm.</h3>
+}
+

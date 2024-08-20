@@ -1,0 +1,115 @@
+﻿
+<div class="container-fluid mt-5">
+  <div class="d-flex flex-wrap justify-content-evenly align-items-center fs-5">
+    <div style="width: 300px; height: auto; padding: 20px; background-color: #f5f5f5;">
+      <div class="card-body">
+        <h5 class="card-title">Tổng sản phẩm</h5>
+        <a asp-area="Owner" asp-controller="Admin" asp-action="AdminProducts" id="increaseBtn" class="btn btn-primary card-text">@ViewBag.TotalProduct</a>
+      </div>
+    </div>
+    <div style="width: 300px; height: auto; padding: 20px; background-color: #f5f5f5;">
+      <div class="card-body align-content-center">
+        <h5 class="card-title">Tổng loại sản phẩm</h5>
+        @*Owner/Admin/ViewLoaiSanPham*@
+        <a asp-area="Owner" asp-controller="Admin" asp-action="ViewLoaiSanPham" id="increaseBtn" class="btn btn-primary card-text">@ViewBag.TotalCategories</a>
+      </div>
+    </div>
+    <div style="width: 300px; height: auto; padding: 20px; background-color: #f5f5f5;">
+      <div class="card-body align-content-center">
+        <h5 class="card-title">Tổng đơn hàng</h5>
+        @*Owner/DonHang*@
+        <a asp-area="Owner" asp-controller="DonHang" asp-action="Index" id="increaseBtn" class="btn btn-primary card-text">@ViewBag.TotalSL</a>
+      </div>
+    </div>
+
+    <div class="p-4 bg-light mt-5">
+      <h4>Biểu đồ doanh thu</h4>
+      <div>
+        <canvas id="myLineChart" height="400" width="1000"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    var fakeData = [
+      { month: 1, totalRevenue: 10000, profit: 5000 },
+      { month: 2, totalRevenue: 12000, profit: 6000 },
+      { month: 3, totalRevenue: 15000, profit: 7000 },
+      { month: 4, totalRevenue: 18000, profit: 8000 },
+      { month: 5, totalRevenue: 20000, profit: 8500 },
+      { month: 6, totalRevenue: 22000, profit: 9000 },
+      { month: 7, totalRevenue: 25000, profit: 9500 },
+      { month: 8, totalRevenue: 27000, profit: 10000 },
+      { month: 9, totalRevenue: 28000, profit: 10500 },
+      { month: 10, totalRevenue: 30000, profit: 11000 },
+      { month: 11, totalRevenue: 32000, profit: 11500 },
+      { month: 12, totalRevenue: 35000, profit: 12000 }
+    ];
+    //$(document).ready(function () {
+    //  // Thay thế fakeData bằng dữ liệu thực tế từ AJAX
+    //  drawChart(fakeData);
+    //});
+
+    $(document).ready(function () {
+      $.ajax({
+        url: '/Owner/Admin/MonthlySales',
+        type: 'GET',
+        success: function (data) {
+          drawChart(data);
+        }
+      });
+    });
+
+    function drawChart(data) {
+      //const months = data.map(item => item.month);
+      //const revenue = data.map(item => item.totalRevenue);
+      //const profit = data.map(item => item.profit);
+
+      var months = [];
+      var revenues = [];
+      var profits = [];
+
+      for (var i = 0; i < data.length; i++) {
+        months.push(data[i].month + '/' + data[i].year); // Tạo chuỗi thể hiện tháng/năm
+        revenues.push(data[i].totalRevenue);
+        profits.push(data[i].totalProfit);
+      }
+
+      var ctx = document.getElementById('myLineChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: months,
+          datasets: [
+            {
+              label: 'Doanh thu',
+              data: revenues,
+              backgroundColor: '#1875f0',
+              borderColor: '#000',
+              borderWidth: 1
+            },
+            {
+              label: 'Lợi nhuận',
+              data: profits,
+              backgroundColor: '#50d166',
+              borderColor: '#000',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+  </script>
+}

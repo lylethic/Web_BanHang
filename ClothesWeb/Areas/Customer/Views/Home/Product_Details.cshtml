@@ -1,0 +1,85 @@
+﻿@model Cart
+
+
+<form method="post">
+  <div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="row" style="margin: 4rem;">
+            <div class="col-md-6">
+              <div class="images p-3">
+                <a class="text-center p-4">
+                  <img id="main-image" src="@Model.Product.ImageUrl" width="350" />
+                </a>
+                <div class="thumbnail text-center">
+                  <img onclick="change_image(this)" src="@Model.Product.ImageUrl" width="100">
+                  <img onclick="change_image(this)" src="@Model.Product.ImageUrl" width="100">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="product p-4">
+                <div class="d-flex justify-content-between align-items-center">
+
+                  @*Back to Shop page*@
+                  <div class="d-flex align-items-center">
+                    <a class="text-black-50" asp-area="Customer" asp-controller="Home" asp-action="Catagori">
+                      <span class="ml-1">
+                        <i class="fa-solid fa-arrow-left fs-10"></i>
+                        Back
+                      </span>
+                    </a>
+                  </div>
+                  @*End Back to Shop page*@
+                  <i class="fa fa-shopping-cart text-muted"></i>
+                </div>
+                <div class="mt-4 mb-3">
+                  <span class="text-uppercase text-muted brand">Orianz</span>
+                  <h5 class="text-uppercase">@Model.Product.Name</h5>
+                  <div class="price d-flex flex-row align-items-center">
+                    <span class="act-price">
+                      @*$@Model.Product.Price*@
+                      @String.Format("{0:0,0}", Model.Product.Price) đ
+                    </span>
+                    <div class="ml-2"> <small class="dis-price">$100</small> <span>80% OFF</span> </div>
+                  </div>
+                </div>
+                <p class="about">@Model.Product.Description</p>
+
+                @*Quantity*@
+                <div class="mt-4 mb-3 ">
+                  <label for="qty">Quantity: </label>
+                  <div class="product-details-quantity">
+                    <input asp-for="Quantity" value="@Model.Quantity" type="number"
+                           id="qty" class="form-control w-50" min="1" max="100" step="1" data-decimals="0" required />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-floating col-12 mb-3">
+                    <select class="form-control" style="z-index:999;" id="shirt-size" value="@Model.Size" asp-for="Size">
+                      <option disabled selected>Select size</option>
+                      <option value="S">S</option>
+                      <option value="M">M</option>
+                      <option value="L">L</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="cart mt-4 align-items-center product-details-action">
+                  <button type="submit" class="btn btn-danger text-uppercase mr-2 px-4">
+                    <span>Add to cart</span>
+                  </button>
+                  <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+

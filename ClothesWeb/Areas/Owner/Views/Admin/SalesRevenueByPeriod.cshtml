@@ -1,0 +1,55 @@
+﻿<div class="p-4 bg-light mt-5">
+  <h4>Biểu đồ cột thông kê doanh thu</h4>
+  <div>
+    <canvas id="myLineChart" height="400" width="1000"></canvas>
+  </div>
+</div>
+
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+  $(document).ready(function () {
+    $.ajax({
+      url: 'Owner/Admin/SalesRevenueByPeriod',
+      type: 'GET',
+      /*data: { period: 'Month' }, // Adjust the period as needed*/
+      success: function (data) {
+        drawChart(data);
+      }
+    });
+  });
+
+  function drawChart(data) {
+    const periods = data.map(item => item.period);
+    const revenue = data.map(item => item.totalRevenue);
+
+    var ctx = document.getElementById('myBarChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: periods,
+        datasets: [
+          {
+            label: 'Doanh thu',
+            data: revenue,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+  </script>
+}
+

@@ -1,0 +1,96 @@
+﻿@model IEnumerable<HoaDon>
+
+@{
+  Pager pager = new Pager();
+  int pageNo = 0;
+  if (ViewBag.Pager != null)
+  {
+    pager = ViewBag.Pager;
+    pageNo = pager.CurentPage;
+  }
+}
+
+<div class="container container-box">
+  <div class="py-5 w-100 container-card">
+    <div class="col-lg-10 mt-5">
+      <div class="card rounded shadow border-0">
+        <div class="card-body p-5 bg-white rounded">
+          <div class="table-responsive">
+            <h2>Danh sách đơn hàng</h2>
+            @if (Model.Any())
+            {
+              <table class="table">
+                <thead class="text-center align-middle font-weight-bold">
+                  <tr>
+                    <td>Id</td>
+                    <td>Tên khách hàng</td>
+                    <td>Số điện thoại</td>
+                    <td>Địa chỉ</td>
+                    <td>Trạng thái đơn hàng</td>
+                    <td>Ngày đặt hàng</td>
+                    <td>Tổng tiền</td>
+                    <td>Chức năng</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach (var item in @Model)
+                  {
+                    <tr>
+                      <td>@item.Id</td>
+                      <td class="text-start">@item.Name</td>
+                      <td>@item.PhoneNumber</td>
+                      <td class="text-start">@item.Address</td>
+                      <td>@item.OrderStatus</td>
+                      <td>@item.OrderDate</td>
+                      <td>@String.Format("{0:0,0}", item.TotalPrice)</td>
+                      @if (item.OrderStatus != "Đã xác nhận")
+                      {
+                        <td class="d-flex flex-column">
+                          <a asp-controller="DonHang" asp-action="XacNhan" asp-route-donHangId="@item.Id" class="btn btn-warning text-white mb-2">Xác nhận</a>
+                          <a asp-controller="DonHang" asp-action="DonhangDetailsAdmin" asp-route-id="@item.Id" class="btn btn-primary text-white mb-2">Chi tiết</a>
+                          <a class="btn btn-danger text-white mb-2" onclick="Xoa('@item.Id', $(this))">Xóa</a>
+                        </td>
+                      }
+                      else
+                      {
+                        <td class="d-flex flex-column">
+                          <p class="btn btn-success text-white mb-2">Đã duyệt</p>
+                          <a asp-controller="DonHang" asp-action="DonhangDetailsAdmin" asp-route-id="@item.Id" class="btn btn-primary text-white mb-2">Chi tiết</a>
+                          <a class="btn btn-danger text-white mb-2" onclick="Xoa('@item.Id', $(this))">Xóa</a>
+
+                        </td>
+                      }
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+            else
+            {
+              <div class="card">
+                <div class="card-header">
+                  Không có đơn hàng
+                </div>
+              </div>
+            }
+            <div class="container">
+              @if (pager.TotalPages > 0)
+              {
+                <ul class="pagination justify-content-center">
+                  @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                  {
+                    <li class="page-item @(pge == pager.CurentPage ? "active" : "")">
+                      <a class="page-link" asp-controller="DonHang"
+                         asp-action="Index"
+                         asp-route-page="@pge">@pge</a>
+                      </li>
+                    }
+                </ul>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
